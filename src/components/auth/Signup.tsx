@@ -27,6 +27,22 @@ export function Signup() {
 
   const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!name.trim()) {
+      toast.error('Please enter your full name');
+      return;
+    }
+    
+    if (!phone.trim()) {
+      toast.error('Please enter your phone number');
+      return;
+    }
+    
+    if (!role) {
+      toast.error('Please select your role');
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -36,7 +52,9 @@ export function Signup() {
       sessionStorage.setItem(`demo_otp_${phone}`, demoOTP);
       sessionStorage.setItem(`demo_signup_data_${phone}`, JSON.stringify({ name, role, phone }));
       
-      toast.success(`OTP sent! Demo OTP: ${demoOTP} (In production, this will be sent via SMS)`);
+      toast.success(`OTP sent! Demo OTP: ${demoOTP} (In production, this will be sent via SMS)`, {
+        duration: 5000
+      });
       setStep('otp');
       
       /* Production code - Uncomment after setting up SMS provider in Supabase:

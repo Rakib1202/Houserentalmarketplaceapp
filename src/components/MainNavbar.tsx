@@ -42,6 +42,14 @@ export function MainNavbar() {
               Listings
             </Link>
             <Link
+              to="/pricing"
+              className={`text-[15px] font-medium transition-colors ${
+                isActive('/pricing') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
+              }`}
+            >
+              Pricing
+            </Link>
+            <Link
               to="/about"
               className={`text-[15px] font-medium transition-colors ${
                 isActive('/about') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
@@ -69,18 +77,22 @@ export function MainNavbar() {
 
           {/* Right Side Actions */}
           <div className="hidden md:flex items-center gap-4">
-            <button className="p-2.5 hover:bg-gray-100 rounded-xl transition-colors">
-              <Search className="size-5 text-gray-600" />
-            </button>
+            <Link to="/search">
+              <button className="p-2.5 hover:bg-gray-100 rounded-xl transition-colors">
+                <Search className="size-5 text-gray-600" />
+              </button>
+            </Link>
             <Link
               to="/login"
               className="text-[15px] font-medium text-gray-700 hover:text-blue-600 transition-colors px-4"
             >
               Login
             </Link>
-            <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 shadow-lg hover:shadow-xl transition-all rounded-xl px-6">
-              Register
-            </Button>
+            <Link to="/signup">
+              <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 shadow-lg hover:shadow-xl transition-all rounded-xl px-6">
+                Register
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -103,6 +115,9 @@ export function MainNavbar() {
             <Link to="/listings" className="block py-2 text-gray-700 hover:text-blue-600">
               Listings
             </Link>
+            <Link to="/pricing" className="block py-2 text-gray-700 hover:text-blue-600">
+              Pricing
+            </Link>
             <Link to="/about" className="block py-2 text-gray-700 hover:text-blue-600">
               About Us
             </Link>
@@ -116,9 +131,11 @@ export function MainNavbar() {
               <Link to="/login" className="block py-2 text-gray-700">
                 Login
               </Link>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500">
-                Register
-              </Button>
+              <Link to="/signup" className="block">
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500">
+                  Register
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

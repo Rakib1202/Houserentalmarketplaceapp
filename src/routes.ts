@@ -7,6 +7,7 @@ import { AdminDashboardPage } from "./components/pages/AdminDashboardPage";
 import { PropertyListingsPage } from "./components/pages/PropertyListingsPage";
 import { CareerPage } from "./components/pages/CareerPage";
 import { JobDetailsPage } from "./components/pages/JobDetailsPage";
+import { SubscriptionPlansPage } from "./components/pages/SubscriptionPlansPage";
 
 // Admin Components
 import { AdminLayout } from "./components/admin/AdminLayout";
@@ -83,6 +84,14 @@ export const router = createBrowserRouter([
       {
         path: "careers/:id",
         Component: JobDetailsPage,
+      },
+      {
+        path: "pricing",
+        Component: SubscriptionPlansPage,
+      },
+      {
+        path: "subscribe",
+        Component: SubscriptionPlansPage,
       },
     ],
   },

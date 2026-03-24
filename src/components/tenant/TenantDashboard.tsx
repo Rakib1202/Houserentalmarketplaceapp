@@ -71,6 +71,8 @@ export function TenantDashboard() {
     return null;
   }
 
+  const isPremium = user.premium;
+
   return (
     <DashboardLayout user={user}>
       <div className="max-w-6xl mx-auto">
@@ -80,25 +82,23 @@ export function TenantDashboard() {
         </div>
 
         {/* Premium Upgrade Banner */}
-        {!user.premium && (
-          <Card className="mb-8 bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <Crown className="size-12 text-yellow-600" />
-                  <div>
-                    <h3 className="text-xl font-semibold text-yellow-900 mb-1">
-                      Upgrade to Premium
-                    </h3>
-                    <p className="text-yellow-800">
-                      Unlock full property addresses, direct owner contacts, and priority support
-                    </p>
-                  </div>
-                </div>
-                <Button variant="default" className="bg-yellow-600 hover:bg-yellow-700">
+        {!isPremium && (
+          <Card className="col-span-full bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200">
+            <CardContent className="p-6 flex items-center gap-4">
+              <Crown className="size-12 text-yellow-600" />
+              <div>
+                <h3 className="text-xl font-semibold text-yellow-900 mb-1">
+                  Upgrade to Premium
+                </h3>
+                <p className="text-yellow-800">
+                  Unlock full property addresses, direct owner contacts, and priority support
+                </p>
+              </div>
+              <Link to="/pricing" className="ml-auto">
+                <Button className="bg-yellow-600 hover:bg-yellow-700 text-white">
                   Upgrade Now
                 </Button>
-              </div>
+              </Link>
             </CardContent>
           </Card>
         )}

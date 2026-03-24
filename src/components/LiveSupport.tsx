@@ -58,15 +58,25 @@ export function LiveSupport() {
       try {
         const response = await supportTicketsAPI.getById(currentTicketId);
         if (response.ticket && response.ticket.messages) {
-          setChatMessages(response.ticket.messages);
+          // Only update if message count changed to avoid unnecessary re-renders
+          if (response.ticket.messages.length !== chatMessages.length) {
+            setChatMessages(response.ticket.messages);
+            
+            // Show notification for new support messages
+            const lastMessage = response.ticket.messages[response.ticket.messages.length - 1];
+            if (lastMessage.sender === 'support' && 
+                !chatMessages.find(m => m.timestamp === lastMessage.timestamp)) {
+              toast.success(`${lastMessage.senderName}: New message received!`);
+            }
+          }
         }
       } catch (error) {
         console.error('Error polling messages:', error);
       }
-    }, 3000); // Poll every 3 seconds
+    }, 2000); // Poll every 2 seconds for faster updates
 
     return () => clearInterval(pollInterval);
-  }, [currentTicketId, chatStarted]);
+  }, [currentTicketId, chatStarted, chatMessages]);
 
   const startChat = async () => {
     if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim()) {

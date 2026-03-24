@@ -43,6 +43,7 @@ export function LiveChatReplyDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterPriority, setFilterPriority] = useState<string>('all');
+  const [filterCategory, setFilterCategory] = useState<string>('all');
   const [loading, setLoading] = useState(false);
   const [employee, setEmployee] = useState<any>(null);
 
@@ -56,26 +57,44 @@ export function LiveChatReplyDashboard() {
     // Load tickets
     loadTickets();
 
-    // Auto-refresh tickets every 5 seconds for real-time updates
+    // Auto-refresh tickets every 3 seconds for real-time updates
     const refreshInterval = setInterval(() => {
-      loadTickets();
-    }, 5000);
+      loadTickets(true); // Silent refresh
+    }, 3000);
 
     return () => clearInterval(refreshInterval);
   }, []);
 
-  const loadTickets = async () => {
+  const loadTickets = async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const response = await supportTicketsAPI.getAll();
-      setTickets(response.tickets || []);
+      
+      // Update tickets and check for new messages
+      const newTickets = response.tickets || [];
+      
+      // Notify about new messages in selected ticket
+      if (selectedTicket && !silent) {
+        const updatedTicket = newTickets.find(t => t.id === selectedTicket.id);
+        if (updatedTicket && updatedTicket.messages.length > selectedTicket.messages.length) {
+          const lastMessage = updatedTicket.messages[updatedTicket.messages.length - 1];
+          if (lastMessage.sender === 'customer') {
+            toast.info(`New message from ${updatedTicket.customerName}`);
+          }
+          setSelectedTicket(updatedTicket);
+        }
+      }
+      
+      setTickets(newTickets);
     } catch (error) {
       console.error('Error loading tickets:', error);
-      toast.error('Failed to load tickets. Using demo data.');
-      // Use demo data if backend not available
-      setTickets(getDemoTickets());
+      if (!silent) {
+        toast.error('Failed to load tickets. Using demo data.');
+        // Use demo data if backend not available
+        setTickets(getDemoTickets());
+      }
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 
@@ -249,8 +268,9 @@ export function LiveChatReplyDashboard() {
     
     const matchesStatus = filterStatus === 'all' || ticket.status === filterStatus;
     const matchesPriority = filterPriority === 'all' || ticket.priority === filterPriority;
+    const matchesCategory = filterCategory === 'all' || ticket.category === filterCategory;
     
-    return matchesSearch && matchesStatus && matchesPriority;
+    return matchesSearch && matchesStatus && matchesPriority && matchesCategory;
   });
 
   const getPriorityColor = (priority: string) => {
@@ -339,6 +359,17 @@ export function LiveChatReplyDashboard() {
               <option value="high">High</option>
               <option value="medium">Medium</option>
               <option value="low">Low</option>
+            </select>
+            
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="flex-1 px-2 py-1.5 text-sm border rounded"
+            >
+              <option value="all">All Category</option>
+              <option value="Technical">Technical</option>
+              <option value="Payment">Payment</option>
+              <option value="General">General</option>
             </select>
           </div>
         </div>

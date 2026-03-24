@@ -263,8 +263,8 @@ export function PropertyDetails() {
                           </div>
                         </div>
                       </div>
-                      <Button className="w-full" variant="default">
-                        Upgrade to Premium
+                      <Button className="w-full" variant="default" asChild>
+                        <Link to="/pricing">Upgrade to Premium</Link>
                       </Button>
                     </div>
                   )}
